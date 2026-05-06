@@ -1,15 +1,30 @@
 
-  cd /home/ubuntu/online-clone-amazon
+ name: Deploy to EC2
 
-  # Pull latest code
-  git pull origin main
+on:
+  push:
+    branches:
+      - main
 
-  # Stop old container
-  docker stop amazon-container || true
-  docker rm amazon-container || true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-  # Build new image
-  docker build -t amazon-app .
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/online-clone-amazon
 
-  # Run new container
-  docker run -d -p 80:80 --name amazon-container amazon-app
+            git pull origin main
+
+            docker stop amazon-container || true
+            docker rm amazon-container || true
+
+            docker build -t amazon-app .
+
+            docker run -d -p 80:80 --name amazon-container amazon-app
