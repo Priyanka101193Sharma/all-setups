@@ -18,12 +18,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/online-clone-amazon
-
             git pull origin main
-
             docker stop amazon-container || true
             docker rm amazon-container || true
-
             docker build -t amazon-app .
-
             docker run -d -p 80:80 --name amazon-container amazon-app
