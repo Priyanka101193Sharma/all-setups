@@ -1,3 +1,4 @@
+
 script: |
   cd /home/ubuntu/online-clone-amazon
 
@@ -12,7 +13,4 @@ script: |
   docker build -t amazon-app .
 
   # Run new container
-  docker run -d -p 80:80 --name amazon-container amazon-apptps://github.com/Ironhack-Archive/online-clone-amazon.git /tmp/app
-            sudo mv /tmp/app/* .
-            sudo rm -rf /tmp/app
-            sudo systemctl restart nginx
+  docker run -d -p 80:80 --name amazon-container amazon-app
